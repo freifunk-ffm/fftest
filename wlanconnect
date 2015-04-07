@@ -1,0 +1,12 @@
+sudo iw dev wlan0 connect dev.ffm.freifunk.net 2412
+sudo dhclient wlan0
+sudo ping 10.126.0.1
+sudo ping 10.126.0.2
+sudo ip rule del to 212.227.222.9; sudo ip rule add to 212.227.222.9 lookup fftest
+sudo ip rule del to 212.227.222.8; sudo ip rule add to 212.227.222.8 lookup fftest
+ip route flush table fftest
+ip route add 0.0.0.0 via 10.126.8.1
+ip route add 0.0.0.0 via 10.126.16.1
+sudo ping -I wlan0 212.227.222.9
+
+wget -q -O - http://www.web.de

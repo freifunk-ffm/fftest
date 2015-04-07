@@ -1,0 +1,20 @@
+#!/bin/bash
+IWLIST="/usr/bin/sudo /sbin/iwlist"
+wifi=$1
+retries=3
+
+count=0
+err=1
+while [[ $count -lt $retries && err -eq 1 ]]
+do
+if $IWLIST scan 2>&1|grep ESSID|grep -q  $wifi
+then
+                echo wifi $wifi found
+err=0
+else
+                echo wifi $wifi not found
+err=1
+fi
+done
+
+exit $err
