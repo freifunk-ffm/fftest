@@ -1,0 +1,26 @@
+#!/bin/bash
+
+[[ $# -lt 4 ]] && exit 1
+tty=$1
+baud=$2
+group=$3
+device=$4
+
+udevice=/dev/ttyUSB0
+# reboot router
+sudo /usr/bin/send $group $device 0
+sleep 10
+stty -F $udevice speed 115200 cs8 -cstopb -parenb
+cat $udevice &
+cc=$!
+sudo /usr/bin/send $group $device 1
+sleep 60
+echo "" >$udevice
+echo "logread" > $udevice
+sleep 5
+echo "ps w" > $udevice
+sleep 5
+echo "batctl o ">$udevice
+sleep 5
+kill $cc
+
