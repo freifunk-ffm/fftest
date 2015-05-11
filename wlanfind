@@ -7,6 +7,7 @@ count=0
 err=1
 while [[ $count -lt $retries && err -eq 1 ]]
 do
+((count++))
 if $IWLIST scan 2>&1|grep ESSID|grep -q  $wifi
 then
                 echo wifi $wifi found

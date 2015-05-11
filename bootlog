@@ -1,19 +1,31 @@
 #!/bin/bash
 
 [[ $# -lt 4 ]] && exit 1
-tty=$1
-baud=$2
-group=$3
-device=$4
+tty="$1"
+baud="$2"
+group="$3"
+device="$4"
 
-udevice=/dev/ttyUSB0
+udevice="$tty"
+stty -F $udevice speed 115200 cs8 -cstopb -parenb
 # reboot router
+for ((i=0;i<5;i++))
+do
 sudo /usr/bin/send $group $device 0
+sleep 1
+done
 sleep 10
 stty -F $udevice speed 115200 cs8 -cstopb -parenb
+echo exit > $udevice
+echo exit > $udevice
+echo exit > $udevice
 cat $udevice &
 cc=$!
+for ((i=0;i<5;i++))
+do
 sudo /usr/bin/send $group $device 1
+sleep 1
+done
 sleep 60
 echo "" >$udevice
 echo "logread" > $udevice
